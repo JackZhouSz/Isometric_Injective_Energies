@@ -4,7 +4,8 @@ if (NOT TARGET Eigen3::Eigen)
     FetchContent_Declare(
         Eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-        GIT_TAG        3.3.7
+#        GIT_TAG        3.3.7  # at siggraph asia 2022 submission
+            GIT_TAG 3.4.0
         GIT_SHALLOW TRUE
     )
 
