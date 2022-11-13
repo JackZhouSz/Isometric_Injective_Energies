@@ -11,7 +11,7 @@ typedef Eigen::SparseMatrix<double> SpMat;
 
 class Energy_Formulation {
 public:
-    explicit Energy_Formulation(size_t dim) : input_dimension(dim) {};
+    explicit Energy_Formulation(size_t dim) : input_dimension(dim), curr_x(dim) {};
     virtual ~Energy_Formulation() = default;
 
     virtual double compute_energy(const Eigen::VectorXd& x, Eigen::VectorXd& energy_list) = 0;
@@ -23,10 +23,21 @@ public:
 
     virtual bool is_injective() { return false; }
 
-    size_t get_input_dimension() { return input_dimension; }
+    size_t get_input_dimension() const { return input_dimension; }
 
-private:
+    bool set_x(const Eigen::VectorXd& x) {
+        if (x.size() != input_dimension) return false;
+        curr_x = x;
+        Eigen::VectorXd eList;
+        compute_energy(curr_x, eList);
+        return true;
+    }
+
+    Eigen::VectorXd get_x() { return curr_x; }
+
+protected:
     size_t input_dimension;
+    Eigen::VectorXd curr_x;
 };
 
 #endif //ISO_TLC_SEA_ENERGY_FORMULATION_H
