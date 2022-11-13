@@ -11,6 +11,7 @@ include(Eigen3)
 include(cli11)
 include(nlohmann-json)
 include(nlopt)
+include(filesystem)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC_LIST)
 
@@ -30,7 +31,7 @@ target_link_libraries(solver_test PUBLIC injectiveEnergy nlopt::nlopt)
 
 # TLC (2D)
 add_executable(TLC_2D apps/TLC_2D.cpp)
-target_link_libraries(TLC_2D PUBLIC injectiveEnergy CLI11::CLI11 nlopt::nlopt)
+target_link_libraries(TLC_2D PUBLIC injectiveEnergy CLI11::CLI11 nlopt::nlopt ghc::filesystem)
 # set_target_properties(TLC_2D PROPERTIES LINKER_LANGUAGE CXX)
 
 # IsoTLC (2D)
