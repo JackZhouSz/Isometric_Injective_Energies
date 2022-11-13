@@ -20,7 +20,6 @@ double objective_func(const std::vector<double>& x, std::vector<double>& grad, v
                 i = 0;
             }
         }
-//        return solver->lastFunctionValue;
         return solver->curr_energy;
     }
 
@@ -95,6 +94,8 @@ void QuasiNewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
         for (size_t i=0; i < x.size(); ++i) {
             curr_x(i) = x[i];
         }
+        // store result x in the energy object f
+        f->set_x(curr_x);
         assert(curr_energy == minf);
         switch (result) {
             case nlopt::SUCCESS:

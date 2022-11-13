@@ -83,7 +83,10 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
     lineSearch(f,x, p, step_size, grad, energyList, energy_next, x_next);
     // check termination after line search
     double step_norm = p.norm() * step_size;
-    if (is_stagnant(energy, energy_next, xnorm, step_norm, stop_type)) return;
+    if (is_stagnant(energy, energy_next, xnorm, step_norm, stop_type)) {
+        f->set_x(x); // make sure the energy object f stores the result x
+        return;
+    }
 
     // iteration 1, 2, ...
     for (curr_iter = 1; curr_iter < maxIter; ++curr_iter) {
@@ -119,7 +122,10 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
         lineSearch(f,x, p, step_size, grad, energyList, energy_next, x_next);
         // check termination after line search
         step_norm = p.norm() * step_size;
-        if (is_stagnant(energy, energy_next, xnorm, step_norm, stop_type)) return;
+        if (is_stagnant(energy, energy_next, xnorm, step_norm, stop_type)) {
+            f->set_x(x);
+            return;
+        }
     }
 
     // reach max iterations
