@@ -69,6 +69,11 @@ int main(int argc, char const *argv[]) {
     bool injective_found = true;
     QN_Solver.stop_at_injectivity = true;
     QN_Solver.optimize(&energy, x0);
+    if (QN_Solver.get_stop_type() == StopType::Injectivity) {
+        // due to QN implementation (NLopt), the mesh with current vertices may not be injective,
+        // even though QN_Solver stops at Injectivity
+        energy.set_V(energy.get_latest_injective_V());
+    }
     std::cout << "Quasi-Newton (" << get_stop_type_string(QN_Solver.get_stop_type()) << "), ";
     std::cout << QN_Solver.get_num_iter() << " iterations, " << "E = " << QN_Solver.get_energy() << std::endl;
     if (!energy.is_injective()) {
