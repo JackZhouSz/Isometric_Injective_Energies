@@ -135,3 +135,20 @@ void Injective_Energy_2D_Formulation::update_x_and_V(const VectorXd &x) {
         }
     }
 }
+
+bool Injective_Energy_2D_Formulation::set_V(const Matrix2Xd &vertices) {
+    if (vertices.cols() != V.cols()) return false;
+    V = vertices;
+    int vDim = 2;
+    // update current x
+    curr_x.resize(freeI.size() * vDim);
+    for (auto i = 0; i < freeI.size(); ++i) {
+        for (auto j = 0; j < vDim; ++j) {
+            curr_x[i * vDim + j] = V(j, freeI(i));
+        }
+    }
+    // update other status by recomputing energy
+    VectorXd eList;
+    compute_energy(curr_x, eList);
+    return true;
+}

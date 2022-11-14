@@ -31,6 +31,9 @@ public:
     // get the current mesh vertices
     Eigen::Matrix2Xd get_V() { return V; }
 
+    // set current mesh vertices
+    bool set_V(const Eigen::Matrix2Xd& vertices);
+
 protected:
     // rest vertices
     Eigen::MatrixXd restV;
