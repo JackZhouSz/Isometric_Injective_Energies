@@ -35,7 +35,7 @@ bool import_data(const std::string& filename, Eigen::MatrixXd &restV, Eigen::Mat
     //initial vertices
     assert(data.contains("initV"));
     n = data["initV"].size();
-    assert(n>0);
+    assert(n == restV.cols());
     ndim = data["initV"][0].size();
     assert(ndim == 2);
     initV.resize(ndim, n);
@@ -58,6 +58,8 @@ bool import_data(const std::string& filename, Eigen::MatrixXd &restV, Eigen::Mat
             F(j, i) = data["F"][i][j].get<int>();
         }
     }
+    assert(F.minCoeff() >= 0);
+    assert(F.maxCoeff() < initV.cols());
 
     // handles
     assert(data.contains("handles"));
@@ -65,6 +67,10 @@ bool import_data(const std::string& filename, Eigen::MatrixXd &restV, Eigen::Mat
     handles.resize(n);
     for (int i = 0; i < n; ++i) {
         handles(i) = data["handles"][i].get<int>();
+    }
+    if (handles.size() > 0) {
+        assert(handles.minCoeff() >= 0);
+        assert(handles.maxCoeff() < initV.cols());
     }
 
     return true;
@@ -97,7 +103,7 @@ bool import_data(const std::string &filename, Eigen::Matrix3Xd &restV, Eigen::Ma
     //initial vertices
     assert(data.contains("initV"));
     n = data["initV"].size();
-    assert(n>0);
+    assert(n == restV.cols());
     ndim = data["initV"][0].size();
     assert(ndim == 3);
     initV.resize(ndim, n);
@@ -120,6 +126,8 @@ bool import_data(const std::string &filename, Eigen::Matrix3Xd &restV, Eigen::Ma
             F(j, i) = data["F"][i][j].get<int>();
         }
     }
+    assert(F.minCoeff() >= 0);
+    assert(F.maxCoeff() < initV.cols());
 
     // handles
     assert(data.contains("handles"));
@@ -127,6 +135,10 @@ bool import_data(const std::string &filename, Eigen::Matrix3Xd &restV, Eigen::Ma
     handles.resize(n);
     for (int i = 0; i < n; ++i) {
         handles(i) = data["handles"][i].get<int>();
+    }
+    if (handles.size() > 0) {
+        assert(handles.minCoeff() >= 0);
+        assert(handles.maxCoeff() < initV.cols());
     }
 
     return true;
