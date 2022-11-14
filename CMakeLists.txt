@@ -32,10 +32,10 @@ target_link_libraries(solver_test PUBLIC injectiveEnergy nlopt::nlopt)
 # TLC (2D)
 add_executable(TLC_2D apps/TLC_2D.cpp)
 target_link_libraries(TLC_2D PUBLIC injectiveEnergy CLI11::CLI11 nlopt::nlopt ghc::filesystem)
-# set_target_properties(TLC_2D PROPERTIES LINKER_LANGUAGE CXX)
 
 # IsoTLC (2D)
-
+add_executable(IsoTLC_2D apps/IsoTLC_2D.cpp)
+target_link_libraries(IsoTLC_2D PUBLIC injectiveEnergy CLI11::CLI11 nlopt::nlopt ghc::filesystem)
 
 # TLC (3D)
 
@@ -51,6 +51,7 @@ target_link_libraries(TLC_2D PUBLIC injectiveEnergy CLI11::CLI11 nlopt::nlopt gh
 
 set(SUITESPARSE_INCLUDE_DIR /usr/local/include CACHE PATH "suitesparse include directory")
 target_include_directories(TLC_2D PUBLIC "${SUITESPARSE_INCLUDE_DIR}")
+target_include_directories(IsoTLC_2D PUBLIC "${SUITESPARSE_INCLUDE_DIR}")
 target_include_directories(solver_test PUBLIC "${SUITESPARSE_INCLUDE_DIR}")
 
 if (WIN32)
@@ -61,11 +62,12 @@ if (WIN32)
     # ------------------------------------------------------------------
     find_package(SuiteSparse CONFIG REQUIRED)
     target_link_libraries(TLC_2D PRIVATE SuiteSparse::CHOLMOD)
+    target_link_libraries(IsoTLC_2D PRIVATE SuiteSparse::CHOLMOD)
     target_link_libraries(solver_test PRIVATE SuiteSparse::CHOLMOD)
 else()
     set(SUITESPARSE_LIB_DIR /usr/local/lib CACHE PATH "suitesparse library directory")
-    # target_link_libraries(TLC_2D PUBLIC -L"${SUITESPARSE_LIB_DIR}" cholmod)
     target_link_libraries(TLC_2D PRIVATE -L"${SUITESPARSE_LIB_DIR}" cholmod)
+    target_link_libraries(IsoTLC_2D PRIVATE -L"${SUITESPARSE_LIB_DIR}" cholmod)
     target_link_libraries(solver_test PRIVATE -L"${SUITESPARSE_LIB_DIR}" cholmod)
 endif()
 
