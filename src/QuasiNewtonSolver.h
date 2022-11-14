@@ -17,7 +17,6 @@ public:
 private:
     // a helper function needed by NLopt solver
     friend double objective_func(const std::vector<double>& x, std::vector<double>& grad, void* solver_func_data);
-//    double lastFunctionValue = std::numeric_limits<double>::infinity();
 };
 
 #endif //ISO_TLC_SEA_QUASINEWTONSOLVER_H

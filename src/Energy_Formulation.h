@@ -25,6 +25,7 @@ public:
 
     size_t get_input_dimension() const { return input_dimension; }
 
+    // set current x and update related member variables
     bool set_x(const Eigen::VectorXd& x) {
         if (x.size() != input_dimension) return false;
         curr_x = x;

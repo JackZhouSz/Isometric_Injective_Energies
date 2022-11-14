@@ -23,7 +23,6 @@ public:
                     const Eigen::VectorXd &energyList,
                     double &energy_next, Eigen::VectorXd& x_next) const;
 
-private:
     // linear search parameters
     double gamma = 1e-4;
     double shrink_factor = 0.7;
