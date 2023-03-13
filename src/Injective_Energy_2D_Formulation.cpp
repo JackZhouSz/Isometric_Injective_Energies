@@ -32,7 +32,6 @@ Injective_Energy_2D_Formulation::Injective_Energy_2D_Formulation(Eigen::MatrixXd
     }
     std::sort(freeI.data(), freeI.data() + freeI.size());
 
-    // experimental: compute free face Indices
     // free face: a triangle with at least one free vertices
     auto nF = F.cols();
     int n_free_face = 0;
