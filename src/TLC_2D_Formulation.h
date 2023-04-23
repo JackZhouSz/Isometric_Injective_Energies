@@ -23,7 +23,7 @@ public:
     compute_energy_with_gradient_Hessian(const Eigen::VectorXd &x, Eigen::VectorXd &energy_list, Eigen::VectorXd &grad,
                                          SpMat &Hess) override;
 
-    bool is_injective() override;
+    bool met_custom_criterion() override;
 
 protected:
     std::string form = "harmonic";

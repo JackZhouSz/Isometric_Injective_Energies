@@ -23,7 +23,7 @@ public:
 
     // check whether the current mesh is injective.
     // If so, store the current mesh.
-    bool is_injective() override = 0;
+    bool met_custom_criterion() override = 0;
 
     // get the mesh vertices when the last time the mesh is injective
     Eigen::Matrix3Xd get_latest_injective_V() { return latest_injective_V; }
@@ -61,7 +61,7 @@ protected:
     // whether mesh boundary is fixed
     bool fixed_boundary;
 
-    // V when the last time is_injective() is true
+    // V when the last time met_custom_criterion() is true
     Eigen::Matrix3Xd latest_injective_V;
 
     // update current x and V

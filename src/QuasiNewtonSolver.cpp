@@ -14,7 +14,7 @@ double objective_func(const std::vector<double>& x, std::vector<double>& grad, v
     auto* solver = data->first;
     auto* f = data->second;
 
-    if (solver->stop_type == Injectivity || solver->stop_type == Max_Iter_Reached) {
+    if (solver->stop_type == Custom_Criterion_Reached || solver->stop_type == Max_Iter_Reached) {
         if (!grad.empty()) {
             for (double & i : grad) {
                 i = 0;
@@ -30,10 +30,10 @@ double objective_func(const std::vector<double>& x, std::vector<double>& grad, v
     if (grad.empty()) {  // only energy is required
         energy = -1;
         solver->curr_iter++;
-        // check injectivity
-        if (f->is_injective() && solver->stop_at_injectivity)
+        // check custom stop criterion
+        if (f->met_custom_criterion() && solver->use_custom_stop_criterion)
         {
-            solver->stop_type = Injectivity;
+            solver->stop_type = Custom_Criterion_Reached;
         }
         // max iter criterion
         if (solver->curr_iter >= solver->maxIter) {
@@ -50,7 +50,6 @@ double objective_func(const std::vector<double>& x, std::vector<double>& grad, v
         for (int i = 0; i < g_vec.size(); ++i) {
             grad[i] = g_vec(i);
         }
-//        solver->lastFunctionValue = energy;
         solver->curr_energy = energy;
     }
     return energy;
@@ -99,7 +98,7 @@ void QuasiNewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
         assert(curr_energy == minf);
         switch (result) {
             case nlopt::SUCCESS:
-                if (stop_type!=Injectivity && stop_type != Max_Iter_Reached) {
+                if (stop_type != Custom_Criterion_Reached && stop_type != Max_Iter_Reached) {
                     stop_type = StopType::Success;
                 }
                 break;

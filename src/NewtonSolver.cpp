@@ -34,6 +34,7 @@ NewtonSolver::lineSearch(Energy_Formulation *f, const VectorXd &x, const VectorX
 void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
     reset();
     if (x0.size() != f->get_input_dimension()) {
+        // x0 is not compatible with f's input dimension
         stop_type = Failure;
         return;
     }
@@ -44,17 +45,20 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
     double energy_next;
     VectorXd energyList;
     VectorXd grad(x.size());
+    // Hessian matrix
     SpMat mat(x.size(), x.size());
 
     //first iter: initialize solver
     curr_iter = 0;
     energy = f->compute_energy_with_gradient_Hessian(x,energyList,grad,mat);
     // check termination before linear search
-    if (f->is_injective() && stop_at_injectivity)
+    if (f->met_custom_criterion() && use_custom_stop_criterion)
     {
-        // no matter whether stop_at_injectivity, f->is_injective() is always called
-        // this helps the object f to update the most recent injective mesh
-        stop_type = Injectivity;
+        // even if use_custom_stop_criterion is false, f->met_custom_criterion() is always called.
+        // this allows to update f's internal state in met_custom_criterion()
+        // for example, if met_custom_criterion() checks if the current mesh is injective,
+        // we can cache the current mesh if the mesh is injective
+        stop_type = Custom_Criterion_Reached;
         return;
     }
     if (grad.norm() < gtol) {
@@ -93,10 +97,12 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
         x = x_next;
         energy = f->compute_energy_with_gradient_Hessian(x,energyList,grad,mat);
         // check before line search
-        if (f->is_injective() && stop_at_injectivity) {
-            // no matter whether stop_at_injectivity, f->is_injective() is always called
-            // this helps the object f to update the most recent injective mesh
-            stop_type = Injectivity;
+        if (f->met_custom_criterion() && use_custom_stop_criterion) {
+            // even if use_custom_stop_criterion is false, f->met_custom_criterion() is always called.
+            // this allows to update f's internal state in met_custom_criterion()
+            // for example, if met_custom_criterion() checks if the current mesh is injective,
+            // we can cache the current mesh if the mesh is injective
+            stop_type = Custom_Criterion_Reached;
             return;
         }
         if (grad.norm() < gtol) {

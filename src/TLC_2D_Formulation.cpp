@@ -200,7 +200,7 @@ TLC_2D_Formulation::compute_energy_with_gradient_Hessian(const VectorXd &x, Vect
     }
 }
 
-bool TLC_2D_Formulation::is_injective() {
+bool TLC_2D_Formulation::met_custom_criterion() {
     for (double area: free_face_areas) {
         if (area <= 0) return false;
     }

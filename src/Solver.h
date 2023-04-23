@@ -14,7 +14,7 @@ enum StopType {
     Ftol_Reached,
     Gtol_Reached,
     Max_Iter_Reached,
-    Injectivity,
+    Custom_Criterion_Reached,
     Failure,
     Success
 };
@@ -30,6 +30,7 @@ public:
     // optimize energy f starting from x0
     virtual void optimize(Energy_Formulation* f, const Eigen::VectorXd& x0) = 0;
 
+    // reset the solver to initial state
     void reset() {
         curr_iter = 0;
         stop_type = Unknown;
@@ -37,10 +38,12 @@ public:
         curr_x.resize(0);
     }
 
+    // get current x
     Eigen::VectorXd get_x() {
         return curr_x;
     }
 
+    // get current energy
     double get_energy() {
         return curr_energy;
     }
@@ -49,6 +52,7 @@ public:
         return stop_type;
     }
 
+    // get current iteration number
     size_t get_num_iter() {
         return curr_iter;
     }
@@ -59,7 +63,7 @@ public:
     double ftol_rel = 1e-8;
     double gtol = 1e-8;
     size_t  maxIter = 10000;
-    bool stop_at_injectivity = false;
+    bool use_custom_stop_criterion = false;
 
 protected:
     // check if the optimization is stagnant. If so, modify type according to the type of stagnation
@@ -74,6 +78,7 @@ protected:
             return true;
         }
         // check xtol
+        // step_norm = ||x_next - x||
         if (step_norm < xtol_abs) {
             type = Xtol_Reached;
             return true;

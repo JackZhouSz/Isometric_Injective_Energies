@@ -21,7 +21,10 @@ public:
     virtual double compute_energy_with_gradient_Hessian(const Eigen::VectorXd &x, Eigen::VectorXd &energy_list,
                                                         Eigen::VectorXd &grad, SpMat &Hess) = 0;
 
-    virtual bool is_injective() { return false; }
+    // user can implement this function to define custom stopping criterion
+    // if the current state satisfies the criterion, return true
+    // if met_custom_criterion() is true and the Solver use_custom_criterion is true, the Solver will stop
+    virtual bool met_custom_criterion() { return false; }
 
     size_t get_input_dimension() const { return input_dimension; }
 
@@ -30,6 +33,7 @@ public:
         if (x.size() != input_dimension) return false;
         curr_x = x;
         Eigen::VectorXd eList;
+        // update related member variables in compute_energy()
         compute_energy(curr_x, eList);
         return true;
     }
