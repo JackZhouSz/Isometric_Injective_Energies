@@ -200,14 +200,6 @@ TLC_2D_Formulation::compute_energy_with_gradient_Hessian(const VectorXd &x, Vect
     }
 }
 
-bool TLC_2D_Formulation::met_custom_criterion() {
-    for (double area: free_face_areas) {
-        if (area <= 0) return false;
-    }
-    // store current V when the mesh is injective
-    latest_injective_V = V;
-    return true;
-}
 
 double TLC_2D_Formulation::compute_total_lifted_content(const Eigen::Matrix2Xd &vertices,
                                                         Eigen::VectorXd &energyList) {
