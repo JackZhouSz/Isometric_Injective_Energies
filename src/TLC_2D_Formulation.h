@@ -74,7 +74,6 @@ protected:
     // compute lifted triangle area
     // input:
     //  - v1, v2, v3: three vertices
-    //  - r: squared edge lengths of aux triangle
     virtual double compute_lifted_TriArea(
             const Eigen::Vector2d &v1,
             const Eigen::Vector2d &v2,
@@ -86,7 +85,6 @@ protected:
     // compute residual (lifted area - signed area)
     // input:
     //  - v1, v2, v3: three vertices
-    //  - r: squared edge lengths of aux triangle
     virtual double compute_residual(
             const Eigen::Vector2d &v1,
             const Eigen::Vector2d &v2,
@@ -98,7 +96,6 @@ protected:
     // compute lifted triangle area with gradient wrt. vert
     // input:
     //  - v1, v2, v3: three vertices
-    //  - r: squared edge lengths of aux triangle
     virtual double compute_lifted_TriArea_with_gradient(
             const Eigen::Vector2d &v1,
             const Eigen::Vector2d &v2,
@@ -111,7 +108,6 @@ protected:
     // compute lifted triangle area with gradient and PSD-projected Hessian of residual wrt. vert
     // input:
     //  - vert: three vertices
-    //  - r: squared edge lengths of aux triangle
     virtual double compute_lifted_TriArea_with_gradient_projected_residual_Hessian(
             const Eigen::Vector2d &v1, const Eigen::Vector2d &v2, const Eigen::Vector2d &v3,
             const Eigen::Vector3d &Dirichlet_coefficient,
