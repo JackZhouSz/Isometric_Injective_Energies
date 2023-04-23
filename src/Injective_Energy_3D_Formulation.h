@@ -23,7 +23,15 @@ public:
 
     // check whether the current mesh is injective.
     // If so, store the current mesh.
-    bool met_custom_criterion() override = 0;
+    bool met_custom_criterion() override;
+
+    // check whether the current mesh is free of inverted or degenerated tetrahedrons
+    bool is_inversion_free();
+
+    // check whether the current mesh is injective
+    // by default, it checks whether the current mesh is inversion free,
+    // derived class can override this function to implement other injectivity check
+    virtual bool is_injective() { return is_inversion_free(); };
 
     // get the mesh vertices when the last time the mesh is injective
     Eigen::Matrix3Xd get_latest_injective_V() { return latest_injective_V; }

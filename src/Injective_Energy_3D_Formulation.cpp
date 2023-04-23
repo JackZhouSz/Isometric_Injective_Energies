@@ -157,3 +157,22 @@ bool Injective_Energy_3D_Formulation::set_V(const Eigen::Matrix3Xd &newV) {
     compute_energy(curr_x, eList);
     return true;
 }
+
+bool Injective_Energy_3D_Formulation::is_inversion_free() {
+    for (double volume : free_tet_volumes) {
+        if (volume <= 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Injective_Energy_3D_Formulation::met_custom_criterion() {
+    if (is_injective()) {
+        // store current V when the mesh is injective
+        latest_injective_V = V;
+        return true;
+    } else {
+        return false;
+    }
+}
