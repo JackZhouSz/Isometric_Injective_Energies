@@ -63,6 +63,9 @@ public:
     double ftol_rel = 1e-8;
     double gtol = 1e-8;
     size_t  maxIter = 10000;
+    // if true, the Solver will check if the user-defined criterion is met in each iteration
+    bool check_custom_stop_criterion = false;
+    // if true and the user-defined criterion is checked to be ture, the Solver will stop
     bool use_custom_stop_criterion = false;
 
 protected:

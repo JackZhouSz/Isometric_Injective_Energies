@@ -31,8 +31,7 @@ double objective_func(const std::vector<double>& x, std::vector<double>& grad, v
         energy = -1;
         solver->curr_iter++;
         // check custom stop criterion
-        if (f->met_custom_criterion() && solver->use_custom_stop_criterion)
-        {
+        if (solver->check_custom_stop_criterion && f->met_custom_criterion() && solver->use_custom_stop_criterion) {
             solver->stop_type = Custom_Criterion_Reached;
         }
         // max iter criterion

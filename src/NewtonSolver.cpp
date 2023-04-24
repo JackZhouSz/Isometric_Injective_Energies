@@ -52,12 +52,7 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
     curr_iter = 0;
     energy = f->compute_energy_with_gradient_Hessian(x,energyList,grad,mat);
     // check termination before linear search
-    if (f->met_custom_criterion() && use_custom_stop_criterion)
-    {
-        // even if use_custom_stop_criterion is false, f->met_custom_criterion() is always called.
-        // this allows to update f's internal state in met_custom_criterion()
-        // for example, if met_custom_criterion() checks if the current mesh is injective,
-        // we can cache the current mesh if the mesh is injective
+    if (check_custom_stop_criterion && f->met_custom_criterion() && use_custom_stop_criterion) {
         stop_type = Custom_Criterion_Reached;
         return;
     }
@@ -96,12 +91,8 @@ void NewtonSolver::optimize(Energy_Formulation *f, const VectorXd &x0) {
     for (curr_iter = 1; curr_iter < maxIter; ++curr_iter) {
         x = x_next;
         energy = f->compute_energy_with_gradient_Hessian(x,energyList,grad,mat);
-        // check before line search
-        if (f->met_custom_criterion() && use_custom_stop_criterion) {
-            // even if use_custom_stop_criterion is false, f->met_custom_criterion() is always called.
-            // this allows to update f's internal state in met_custom_criterion()
-            // for example, if met_custom_criterion() checks if the current mesh is injective,
-            // we can cache the current mesh if the mesh is injective
+        // check termination before line search
+        if (check_custom_stop_criterion && f->met_custom_criterion() && use_custom_stop_criterion) {
             stop_type = Custom_Criterion_Reached;
             return;
         }

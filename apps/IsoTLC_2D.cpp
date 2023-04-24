@@ -67,21 +67,23 @@ int main(int argc, char const *argv[]) {
     // stage 1: find injectivity
     std::cout << "------ stage 1: find injectivity ------" << std::endl;
     bool injective_found = true;
-    QN_Solver.stop_at_injectivity = true;
+    QN_Solver.check_custom_stop_criterion = true;
+    QN_Solver.use_custom_stop_criterion = true;
     QN_Solver.optimize(&energy, x0);
-    if (QN_Solver.get_stop_type() == StopType::Injectivity) {
+    if (QN_Solver.get_stop_type() == StopType::Custom_Criterion_Reached) {
         // due to QN implementation (NLopt), the mesh with current vertices may not be injective,
-        // even though QN_Solver stops at Injectivity
+        // even though QN_Solver stops at Custom_Criterion_Reached
         energy.set_V(energy.get_latest_injective_V());
     }
     std::cout << "Quasi-Newton (" << get_stop_type_string(QN_Solver.get_stop_type()) << "), ";
     std::cout << QN_Solver.get_num_iter() << " iterations, " << "E = " << QN_Solver.get_energy() << std::endl;
-    if (!energy.is_injective()) {
-        PN_Solver.stop_at_injectivity = true;
+    if (!energy.met_custom_criterion()) {
+        PN_Solver.check_custom_stop_criterion = true;
+        PN_Solver.use_custom_stop_criterion = true;
         PN_Solver.optimize(&energy, x0);
         std::cout << "Projected-Newton (" << get_stop_type_string(PN_Solver.get_stop_type()) << "), ";
         std::cout << PN_Solver.get_num_iter() << " iterations, " << "E = " << PN_Solver.get_energy() << std::endl;
-        if (!energy.is_injective()) {
+        if (!energy.met_custom_criterion()) {
             std::cout << "Failed to find injective map!" << std::endl;
             injective_found = false;
         }
@@ -90,7 +92,8 @@ int main(int argc, char const *argv[]) {
     if (injective_found && !args.stop_at_injectivity) {
         std::cout << "------ stage 2: lower distortion ------" << std::endl;
         // optimize until energy convergence, starting from the result of stage 1
-        PN_Solver.stop_at_injectivity = false;
+        PN_Solver.check_custom_stop_criterion = true;
+        PN_Solver.use_custom_stop_criterion = false;
         PN_Solver.optimize(&energy, energy.get_x());
         std::cout << "Projected-Newton (" << get_stop_type_string(PN_Solver.get_stop_type()) << "), ";
         std::cout << PN_Solver.get_num_iter() << " iterations, " << "E = " << PN_Solver.get_energy() << std::endl;
