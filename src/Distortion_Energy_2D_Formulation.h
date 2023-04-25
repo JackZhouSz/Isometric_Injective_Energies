@@ -38,9 +38,22 @@ protected:
                                                  const Eigen::MatrixXd &pFpx,
                                                  Eigen::Matrix2Xd &grad);
 
+    double compute_triangle_energy_with_gradient_projected_Hessian(const Eigen::Vector2d &v1,
+                                                                   const Eigen::Vector2d &v2,
+                                                                   const Eigen::Vector2d &v3,
+                                                                   double rest_triangle_area,
+                                                                   const Eigen::Matrix2d &rest_inv_EdgeMat,
+                                                                   const Eigen::MatrixXd &pFpx,
+                                                                   Eigen::Matrix2Xd &grad,
+                                                                   Eigen::MatrixXd &hess);
+
     virtual double compute_psi(double I1, double I2, double I3) = 0;
 
     virtual double compute_psi_with_gradient(double I1, double I2, double I3, Eigen::Vector3d &grad_psi) = 0;
+
+    virtual bool compute_analytic_eigen_information(double sigma1, double sigma2,
+                                                    double I1, double I2, double I3,
+                                                    Eigen::Vector4d &lambdas, Eigen::Matrix2d &matA) = 0;
 };
 
 
