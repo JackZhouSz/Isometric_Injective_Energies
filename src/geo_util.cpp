@@ -310,6 +310,17 @@ extract_mesh_boundary_edges(const Eigen::Matrix3Xi &faces, std::vector<std::pair
     }
 }
 
+void extract_mesh_boundary_vertices(const Eigen::Matrix3Xi &faces, std::vector<size_t> &boundary_vertices) {
+    std::vector<std::pair<size_t, size_t>> boundary_edges;
+    extract_mesh_boundary_edges(faces, boundary_edges);
+    // create a set of size_t to collect indices of boundary vertices, then convert the set to a vector
+    std::set<size_t> boundary_vertex_set;
+    for (const auto & edge : boundary_edges) {
+        boundary_vertex_set.insert(edge.first);
+        boundary_vertex_set.insert(edge.second);
+    }
+    boundary_vertices.assign(boundary_vertex_set.begin(), boundary_vertex_set.end());
+}
 
 void extract_mesh_boundary_triangles(const Eigen::Matrix4Xi &tets,
                                      std::vector<std::array<int,3>>& boundary_triangles)
@@ -344,6 +355,19 @@ void extract_mesh_boundary_triangles(const Eigen::Matrix4Xi &tets,
             boundary_triangles.emplace_back(hf);
         }
     }
+}
+
+void extract_mesh_boundary_vertices(const Eigen::Matrix4Xi &tets, std::vector<size_t> &boundary_vertices) {
+    std::vector<std::array<int,3>> boundary_triangles;
+    extract_mesh_boundary_triangles(tets, boundary_triangles);
+    // create a set of size_t to collect indices of boundary vertices, then convert the set to a vector
+    std::set<size_t> boundary_vertex_set;
+    for (const auto & tri : boundary_triangles) {
+        boundary_vertex_set.insert(tri[0]);
+        boundary_vertex_set.insert(tri[1]);
+        boundary_vertex_set.insert(tri[2]);
+    }
+    boundary_vertices.assign(boundary_vertex_set.begin(), boundary_vertex_set.end());
 }
 
 
@@ -408,3 +432,5 @@ compute_tet_signed_volume_with_gradient(const Point3D &p1, const Point3D &p2, co
     // signed volume
     return (e12.cross(e13)).dot(e14)/6;
 }
+
+

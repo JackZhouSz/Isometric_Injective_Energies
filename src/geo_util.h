@@ -122,6 +122,14 @@ void extract_mesh_boundary_edges(const Eigen::Matrix3Xi &faces,
 void extract_mesh_boundary_triangles(const Eigen::Matrix4Xi &tets,
                                      std::vector<std::array<int,3>>& boundary_triangles);
 
+//
+void extract_mesh_boundary_vertices(const Eigen::Matrix3Xi &faces,
+                                    std::vector<size_t> &boundary_vertices);
+
+//
+void extract_mesh_boundary_vertices(const Eigen::Matrix4Xi &tets,
+                                    std::vector<size_t> &boundary_vertices);
+
 // compute angle between from vector1 to vector2
 // return: angle in (-pi, pi]
 double compute_vec_vec_angle(const Eigen::Vector2d &vec1, const Eigen::Vector2d &vec2);
