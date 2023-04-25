@@ -19,11 +19,13 @@ int main(int argc, char const *argv[]) {
         std::string input_file;
         std::string distortion_energy = "ARAP";
         bool fix_boundary = false;
+        std::string solver_type = "PN";
     } args;
     CLI::App app{"Mapping triangle mesh by optimizing distortion energy"};
     app.add_option("input_file", args.input_file, "input data file")->required();
     app.add_flag("-B,--fix-boundary", args.fix_boundary, "Fix boundary vertices");
     app.add_option("-E,--distortion-energy", args.distortion_energy, "distortion energy type")->required();
+    app.add_option("-S,--solver-type", args.solver_type, "solver type");
     CLI11_PARSE(app, argc, argv);
     // save result mesh to the same directory of the input file
     std::string result_file;
@@ -87,23 +89,20 @@ int main(int argc, char const *argv[]) {
     NewtonSolver PN_Solver;
     QN_Solver.maxIter = opts.maxIter;
     PN_Solver.maxIter = opts.maxIter;
-    // Quasi-Newton
-    QN_Solver.optimize(energy_ptr, x0);
-    std::cout << "Quasi-Newton (" << get_stop_type_string(QN_Solver.get_stop_type()) << "), ";
-    std::cout << QN_Solver.get_num_iter() << " iterations, " << "E = " << QN_Solver.get_energy() << std::endl;
-
-//        if (!energy.met_custom_criterion()) {
-//            PN_Solver.check_custom_stop_criterion = true;
-//            PN_Solver.use_custom_stop_criterion = true;
-//            PN_Solver.optimize(&energy, x0);
-//            std::cout << "Projected-Newton (" << get_stop_type_string(PN_Solver.get_stop_type()) << "), ";
-//            std::cout << PN_Solver.get_num_iter() << " iterations, " << "E = " << PN_Solver.get_energy() << std::endl;
-//            if (!energy.met_custom_criterion()) {
-//                std::cout << "Failed to find injective map!" << std::endl;
-//                injective_found = false;
-//            }
-//        }
-
+    if (args.solver_type == "QN") {
+        // Quasi-Newton
+        QN_Solver.optimize(energy_ptr, x0);
+        std::cout << "Quasi-Newton (" << get_stop_type_string(QN_Solver.get_stop_type()) << "), ";
+        std::cout << QN_Solver.get_num_iter() << " iterations, " << "E = " << QN_Solver.get_energy() << std::endl;
+    } else if (args.solver_type == "PN") {
+        // Projected-Newton
+        PN_Solver.optimize(energy_ptr, x0);
+        std::cout << "Projected-Newton (" << get_stop_type_string(PN_Solver.get_stop_type()) << "), ";
+        std::cout << PN_Solver.get_num_iter() << " iterations, " << "E = " << PN_Solver.get_energy() << std::endl;
+    } else {
+        std::cout << "Unknown solver type: " << args.solver_type << std::endl;
+        return -1;
+    }
 
     // save result
     export_mesh(result_file, energy_ptr->get_V(), F);
