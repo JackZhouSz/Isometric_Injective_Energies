@@ -22,6 +22,13 @@ protected:
         grad_psi << -2, 1, 0;
         return I2 - 2 * I1 + 2;
     }
+
+    bool compute_analytic_eigen_information(double sigma1, double sigma2,
+                                            double I1, double I2, double I3,
+                                            Eigen::Vector4d &lambdas, Eigen::Matrix2d &matA) final {
+        lambdas << 2, 2, 2-4/I1, 2;
+        return true;
+    }
 };
 
 
