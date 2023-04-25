@@ -76,5 +76,37 @@ void compute_tet_mesh_singular_values(const Eigen::Matrix3Xd& rest_vertices,
                                       const Eigen::Matrix4Xi& Tets,
                                       Eigen::Matrix3Xd& singular_values);
 
+// compute invariant I1's derivative w.r.t. deformation gradient F for a triangle
+// input: rotation-variant SVD of F
+// output: derivative of I1 w.r.t. F, flattened to a vector
+void compute_d_I1_d_f(const Eigen::Matrix2d& U,
+                      const Eigen::Matrix2d& V,
+                      Eigen::Vector4d& d_I1_d_f);
+
+// compute invariant I1's derivative w.r.t. deformation gradient F for a tetrahedron
+// input: rotation-variant SVD of F
+// output: derivative of I1 w.r.t. F, flattened to a vector
+void compute_d_I1_d_f(const Eigen::Matrix3d& U,
+                      const Eigen::Matrix3d& V,
+                      Vector9d& d_I1_d_f);
+
+// compute invariant I2's derivative w.r.t. flattened deformation gradient f
+Eigen::VectorXd compute_d_I2_d_f(const Eigen::VectorXd& f);
+
+// compute invariant I3's derivative w.r.t. flattened deformation gradient f for a triangle
+// input: rotation-variant SVD of F
+// output: derivative of I3 w.r.t. F, flattened to a vector
+void compute_d_I3_d_f(const Eigen::Matrix2d& U,
+                      const Eigen::Vector2d& singular_values,
+                      const Eigen::Matrix2d& V,
+                      Eigen::Vector4d& d_I3_d_f);
+
+// compute invariant I3's derivative w.r.t. flattened deformation gradient f for a tetrahedron
+// input: rotation-variant SVD of F
+// output: derivative of I3 w.r.t. F, flattened to a vector
+void compute_d_I3_d_f(const Eigen::Matrix3d& U,
+                      const Eigen::Vector3d& singular_values,
+                      const Eigen::Matrix3d& V,
+                      Vector9d& d_I3_d_f);
 
 #endif //TLC_DEFORMATION_GRADIENT_UTIL_H

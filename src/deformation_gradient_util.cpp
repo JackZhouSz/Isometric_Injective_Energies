@@ -222,5 +222,29 @@ void compute_tet_mesh_singular_values(const Eigen::Matrix3Xd &rest_vertices, con
 
 }
 
+void compute_d_I1_d_f(const Eigen::Matrix2d &U, const Eigen::Matrix2d &V,
+                      Eigen::Vector4d &d_I1_d_f) {
+    vectorize2x2(U * V.transpose(), d_I1_d_f);
+}
+
+void compute_d_I1_d_f(const Eigen::Matrix3d &U, const Eigen::Matrix3d &V, Vector9d &d_I1_d_f) {
+    vectorize3x3(U * V.transpose(), d_I1_d_f);
+}
+
+Eigen::VectorXd compute_d_I2_d_f(const Eigen::VectorXd& f) { return 2 * f; }
+
+void compute_d_I3_d_f(const Eigen::Matrix2d &U, const Eigen::Vector2d &singular_values, const Eigen::Matrix2d &V,
+                      Eigen::Vector4d &d_I3_d_f) {
+    Eigen::DiagonalMatrix<double, 2> S(singular_values[1], singular_values[0]);
+    vectorize2x2(U * S * V.transpose(), d_I3_d_f);
+}
+
+void compute_d_I3_d_f(const Eigen::Matrix3d &U, const Eigen::Vector3d &singular_values, const Eigen::Matrix3d &V,
+                      Vector9d &d_I3_d_f) {
+    Eigen::DiagonalMatrix<double, 3> S(singular_values[1] * singular_values[2],
+                                       singular_values[0] * singular_values[2],
+                                       singular_values[0] * singular_values[1]);
+    vectorize3x3(U * S * V.transpose(), d_I3_d_f);
+}
 
 
