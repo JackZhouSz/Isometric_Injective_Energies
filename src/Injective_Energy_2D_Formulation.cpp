@@ -32,7 +32,7 @@ Injective_Energy_2D_Formulation::Injective_Energy_2D_Formulation(Eigen::MatrixXd
     }
     std::sort(freeI.data(), freeI.data() + freeI.size());
 
-    // free face: a triangle with at least one free vertices
+    // free face: a triangle with at least one free vertex
     auto nF = F.cols();
     int n_free_face = 0;
     std::vector<bool> free_faceQ(nF, false);
