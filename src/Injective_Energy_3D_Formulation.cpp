@@ -14,7 +14,7 @@ Injective_Energy_3D_Formulation::Injective_Energy_3D_Formulation(Eigen::MatrixXd
         V(std::move(initV)), restV(std::move(restV_)) {
     // compute freeI: indices of free vertices
     auto nV = restV.cols();
-    int vDim = 3;
+    const int vDim = 3;
 
     std::vector<bool> freeQ(nV, true);
     for (auto i = 0; i < handles.size(); ++i) {
