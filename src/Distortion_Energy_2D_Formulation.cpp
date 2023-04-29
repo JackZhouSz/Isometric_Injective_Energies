@@ -23,7 +23,7 @@ Distortion_Energy_2D_Formulation::Distortion_Energy_2D_Formulation(Eigen::Matrix
         restA(i) = compute_Heron_tri_area(e1.squaredNorm(), e2.squaredNorm(), e3.squaredNorm());
     }
 
-    // compute inverse of edge matrix and pFpx
+    // compute inverse of edge matrix
     rest_invEdgeMat.reserve(F.cols());
     Eigen::Matrix2d rest_edge_mat;
     for (int i = 0; i < F.cols(); ++i) {

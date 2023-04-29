@@ -47,10 +47,22 @@ protected:
                                                                    Eigen::Matrix2Xd &grad,
                                                                    Eigen::MatrixXd &hess);
 
+    // compute psi from invariant I1, I2, I3
+    // such that the distortion of a triangle is rest_triangle_area * psi
     virtual double compute_psi(double I1, double I2, double I3) = 0;
 
+    // compute psi from invariant I1, I2, I3
+    // also compute the gradient of psi w.r.t. I1, I2, I3
     virtual double compute_psi_with_gradient(double I1, double I2, double I3, Eigen::Vector3d &grad_psi) = 0;
 
+    // compute the analytic eigen-system of the Hessian of psi w.r.t. flattened deformation gradient
+    // input:
+    // - singular values sigma1, sigma2
+    // - invariants I1, I2, I3
+    // output:
+    // - eigenvalues (lambdas): scale1, scale2, twist, flip
+    // - stretching matrix: matA
+    // return: true if the scaling modes are decoupled, i.e. matA is diagonal
     virtual bool compute_analytic_eigen_information(double sigma1, double sigma2,
                                                     double I1, double I2, double I3,
                                                     Eigen::Vector4d &lambdas, Eigen::Matrix2d &matA) = 0;
