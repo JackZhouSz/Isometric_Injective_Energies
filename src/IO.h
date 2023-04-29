@@ -45,5 +45,8 @@ void import_solver_options(const std::string &filename, SolverOptions& options);
 // export mesh
 void export_mesh(const std::string &filename, const Eigen::MatrixXd& V, const Eigen::MatrixXi& F);
 
+// export to MSH file
+void export_MSH(const std::string &filename, const Eigen::MatrixXd &V, const Eigen::MatrixXi &F);
+
 
 #endif //ISO_TLC_SEA_IO_H

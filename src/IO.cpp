@@ -201,3 +201,39 @@ void export_mesh(const std::string &filename, const Eigen::MatrixXd &V, const Ei
 
     fout.close();
 }
+
+
+void export_MSH(const std::string &filename, const Eigen::MatrixXd &V, const Eigen::MatrixXi &F) {
+    std::ofstream outfile(filename);
+    if (!outfile.is_open()) {
+        std::cerr << "Error: Unable to open the file for writing." << std::endl;
+        return;
+    }
+
+    // Write the mesh format header
+    outfile << "$MeshFormat\n";
+    outfile << "2.2 0 8\n";
+    outfile << "$EndMeshFormat\n";
+
+    // Write the nodes
+    outfile << "$Nodes\n";
+    outfile << V.cols() << "\n";
+    for (int i = 0; i < V.cols(); ++i) {
+        outfile << (i + 1) << " " << V(0, i) << " " << V(1, i) << " " << V(2, i) << "\n";
+    }
+    outfile << "$EndNodes\n";
+
+    // Write the elements
+    outfile << "$Elements\n";
+    outfile << F.cols() << "\n";
+    for (int i = 0; i < F.cols(); ++i) {
+        outfile << (i + 1) << " 4 2 0 0";
+        for (int j = 0; j < F.rows(); ++j) {
+            outfile << " " << (F(j, i) + 1);
+        }
+        outfile << "\n";
+    }
+    outfile << "$EndElements\n";
+
+    outfile.close();
+}
