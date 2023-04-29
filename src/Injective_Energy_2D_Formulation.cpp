@@ -15,7 +15,7 @@ Injective_Energy_2D_Formulation::Injective_Energy_2D_Formulation(Eigen::MatrixXd
           F(std::move(F_)), V(std::move(initV)), restV(std::move(restV_)) {
     // compute freeI: indices of free vertices
     auto nV = restV.cols();
-    int vDim = 2;
+    const int vDim = 2;
     std::vector<bool> freeQ(nV, true);
     for (auto i = 0; i < handles.size(); ++i) {
         freeQ[handles(i)] = false;
