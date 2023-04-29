@@ -10,6 +10,8 @@
 #include "QuasiNewtonSolver.h"
 #include "Dirichlet_2D_Formulation.h"
 #include "ARAP_2D_Formulation.h"
+#include "TLC_Residual_2D_Formulation.h"
+#include "IsoTLC_Residual_2D_Formulation.h"
 
 using namespace Eigen;
 
@@ -77,7 +79,25 @@ int main(int argc, char const *argv[]) {
         energy_ptr = new ARAP_2D_Formulation(restV, initV, F, handles);
     } else if (args.distortion_energy == "Dirichlet") {
         energy_ptr = new Dirichlet_2D_Formulation(restV, initV, F, handles);
-    } else {
+    } else if (args.distortion_energy == "TLC") {
+        if (handles.size() == 0) {
+            // if no handles are specified, use the first two vertices as handles
+            handles.resize(2);
+            handles << 0, 1;
+        }
+//        opts.alpha = 0;
+//        opts.form = "Tutte";
+        energy_ptr = new TLC_Residual_2D_Formulation(restV, initV, F, handles,opts.form, opts.alpha);
+    } else if (args.distortion_energy == "IsoTLC") {
+        if (handles.size() == 0) {
+            // if no handles are specified, use the first vertex as handles
+            // this removes the translation ambiguity
+            handles.resize(1);
+            handles << 0;
+        }
+        energy_ptr = new IsoTLC_Residual_2D_Formulation(restV, initV, F, handles, opts.form, opts.alpha);
+    }
+    else {
         std::cout << "Unknown distortion energy type: " << args.distortion_energy << std::endl;
         return -1;
     }
