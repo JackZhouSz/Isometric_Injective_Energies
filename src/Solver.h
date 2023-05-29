@@ -72,14 +72,14 @@ protected:
     // check if the optimization is stagnant. If so, modify type according to the type of stagnation
     bool is_stagnant(double energy, double energy_next, double x_norm, double step_norm, StopType& type) const {
         //check ftol
-        if (fabs(energy_next - energy) < ftol_abs) {
-            type = Ftol_Reached;
-            return true;
-        }
-        if (energy != 0 && fabs((energy_next - energy) / energy) < ftol_rel) {
-            type = Ftol_Reached;
-            return true;
-        }
+//        if (fabs(energy_next - energy) < ftol_abs) {
+//            type = Ftol_Reached;
+//            return true;
+//        }
+//        if (energy != 0 && fabs((energy_next - energy) / energy) < ftol_rel) {
+//            type = Ftol_Reached;
+//            return true;
+//        }
         // check xtol
         // step_norm = ||x_next - x||
         if (step_norm < xtol_abs) {
