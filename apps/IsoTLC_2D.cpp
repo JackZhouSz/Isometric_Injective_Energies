@@ -94,6 +94,7 @@ int main(int argc, char const *argv[]) {
         // optimize until energy convergence, starting from the result of stage 1
         PN_Solver.check_custom_stop_criterion = true;
         PN_Solver.use_custom_stop_criterion = false;
+        PN_Solver.gtol *= (opts.alpha / 1e-2);
         PN_Solver.optimize(&energy, energy.get_x());
         std::cout << "Projected-Newton (" << get_stop_type_string(PN_Solver.get_stop_type()) << "), ";
         std::cout << PN_Solver.get_num_iter() << " iterations, " << "E = " << PN_Solver.get_energy() << std::endl;
