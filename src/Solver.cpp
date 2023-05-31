@@ -6,7 +6,7 @@
 
 std::string get_stop_type_string(StopType t) {
     switch (t) {
-        case Unknown: return "Unknown";
+        case Unknown_Type: return "Unknown";
         case Xtol_Reached: return "Xtol_Reached";
         case Ftol_Reached: return "Ftol_Reached";
         case Gtol_Reached: return "Gtol_Reached";

@@ -9,7 +9,7 @@
 #include "Energy_Formulation.h"
 
 enum StopType {
-    Unknown,
+    Unknown_Type,
     Xtol_Reached,
     Ftol_Reached,
     Gtol_Reached,
@@ -33,7 +33,7 @@ public:
     // reset the solver to initial state
     void reset() {
         curr_iter = 0;
-        stop_type = Unknown;
+        stop_type = Unknown_Type;
         curr_energy = std::numeric_limits<double>::infinity();
         curr_x.resize(0);
     }
@@ -100,7 +100,7 @@ protected:
     // x at current iteration
     Eigen::VectorXd curr_x;
     // stop type for optimization
-    StopType stop_type = Unknown;
+    StopType stop_type = Unknown_Type;
 };
 
 #endif //ISO_TLC_SEA_SOLVER_H
