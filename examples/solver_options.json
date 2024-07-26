@@ -1,0 +1,5 @@
+{
+	"form":"harmonic",
+	"alpha":1.0e-8,
+	"maxIter":10000
+}
