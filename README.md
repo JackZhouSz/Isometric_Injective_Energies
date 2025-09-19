@@ -1,6 +1,6 @@
 # Isometric_Injective_Energies
 
-Code release is in progress. Please stay tuned.
+:bell: **Importaint**: Please visit [Constrained-Injective-Mappings](https://github.com/duxingyi-charles/Constrained-Injective-Mappings) project for the code of Paper "Isometric Energies for Recovering Injectivity in Constrained Mapping".
 
 ## Usage
 
